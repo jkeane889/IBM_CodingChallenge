@@ -3,6 +3,7 @@ import React, { useState, memo, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import characterIDs from './characterIDs'
 
 const CharacterInfo = props => {
 
@@ -18,29 +19,9 @@ const CharacterInfo = props => {
         },
     }));
     
-    const charIDs = {
-        'Luke Skywalker': 1,
-        'C-3PO': 2,
-        'R2-D2': 3,
-        'Darth Vader': 4,
-        'Leia Organa': 5,
-        'Owen Lars': 6,
-        'Beru Whitesun lars': 7,
-        'R5-D4': 8,
-        'Biggs Darklighter': 9,
-        'Obi-Wan Kenobi': 10
-    };
-    
     if (props.character) {
-        let name;
-        let height;
-        let mass;
-        let hairColor;
-        let skinColor;
-        let eyeColor;
-        let birthYear;
-        let gender;
 
+        // Use effect hook to fetch the details of individual from API
         useEffect(() => {
             async function getCharacterDetails(id) {
                 const response = await axios.get(`https://swapi.co/api/people/${id}`)
@@ -61,8 +42,8 @@ const CharacterInfo = props => {
                 props.getCharactersFilms(response.data.films)
             }
             
-            getCharacterDetails(charIDs[props.character]);
-        }, [props.character]);
+            getCharacterDetails(characterIDs.charIDs[props.character.toLowerCase()]);
+        }, []);
         
         const classes = useStyles();
 

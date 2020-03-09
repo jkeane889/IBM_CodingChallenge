@@ -1,6 +1,6 @@
 import React, { useState, memo, useEffect } from 'react';
-// import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
+import charIDs from './characterIDs.js'
 
 const useStyles = makeStyles({
   option: {
@@ -19,7 +19,9 @@ const DropDown = props => {
   const [items, setItems] = React.useState([
     { label: "Loading ...", value: "" }
   ]);
-  const [value, setValue] = React.useState("R2-D2");
+
+  // Value to store selection from search
+  const [value, setValue] = React.useState('');
 
   // Get all people from API, parse JSON data, then iterate over
   //  final data and create object for each label and name
@@ -34,22 +36,32 @@ const DropDown = props => {
   }, []);
 
   return (
-    <select disabled={loading}
-            value={value}
-            onChange={(e) => {
-              setValue(e.currentTarget.value);
-              props.selectCharacter(e.currentTarget.value)
-            }}
-      >
-      {items.map(item => (
-        <option
-          key={item.value}
-          value={item.value}
+    <div>
+      <input
+				value={value}
+			  onChange={(e) => setValue(e.target.value)}
+			/>
+      <button onClick={() => {
+        props.selectCharacter(value)
+      }}>Search</button>
+      <br></br>
+      <select disabled={loading}
+              value={value}
+              onChange={(e) => {
+                setValue(e.currentTarget.value);
+                props.selectCharacter(e.currentTarget.value)
+              }}
         >
-          {item.label}
-        </option>
-      ))}
-    </select>
+        {items.map(item => (
+          <option
+            key={item.value}
+            value={item.value}
+          >
+            {item.label}
+          </option>
+        ))}
+      </select>
+    </div>
   );
 }
 

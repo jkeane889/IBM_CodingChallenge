@@ -12,6 +12,7 @@ import Container from '@material-ui/core/Container';
 import DropDown from './components/DropDown';
 import CharacterInfo from './components/CharacterInfo';
 import MovieListItem from './components/MovieListItem';
+import characterIDs from './components/characterIDs'
 
 const useStyles = makeStyles(theme => ({
    icon: {
@@ -67,7 +68,15 @@ const App = props => {
 
    // select character
    const selectCharacter = (val) => {
-      setCharacter(val);
+     let lowerCase = val.toString().toLowerCase();
+     console.log("This is to lowercase", lowerCase)
+     console.log("the obj:", characterIDs)
+     if (!characterIDs.charIDs[lowerCase]) {
+       window.alert('Your input did not contain a Star Wars character, please try again!');
+       setCharacter('');
+      } else {
+        setCharacter(val);
+     }  
    };
 
    // get films of character
@@ -92,7 +101,7 @@ const App = props => {
         <div className={classes.heroContent}>
           <Container maxWidth="sm">
             <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-              Star Wars Cast
+              The Star Wars Characters
             </Typography>
               <DropDown align="center" selectCharacter={selectCharacter}></DropDown>
             <CharacterInfo character={character} details={details} getDetails={getDetails} getCharactersFilms={getCharactersFilms}></CharacterInfo>
@@ -113,7 +122,7 @@ const App = props => {
           Search For your Favorite Star Wars Characters!
         </Typography>
         <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
-          Select a character from the drop down menu to see their details... 
+          Select a character from the drop down menu to see their details OR add a new character to fetch their details... 
         </Typography>
       </footer>
       {/* End footer */}
