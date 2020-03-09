@@ -1,7 +1,22 @@
 import axios from 'axios';
 import React, { useState, memo, useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
 
 const CharacterInfo = props => {
+
+    const useStyles = makeStyles(theme => ({
+        root: {
+          flexGrow: 1,
+        },
+        paper: {
+          padding: theme.spacing(2),
+          marginTop: theme.spacing(2),
+          textAlign: 'center',
+          color: theme.palette.text.secondary,
+        },
+    }));
     
     const charIDs = {
         'Luke Skywalker': 1,
@@ -15,50 +30,76 @@ const CharacterInfo = props => {
         'Biggs Darklighter': 9,
         'Obi-Wan Kenobi': 10
     };
-
-    let name;
-    let height;
-    let mass;
-    let hairColor;
-    let skinColor;
-    let eyeColor;
-    let birthYear;
-    let gender;
-
+    
     if (props.character) {
+        let name;
+        let height;
+        let mass;
+        let hairColor;
+        let skinColor;
+        let eyeColor;
+        let birthYear;
+        let gender;
+
         useEffect(() => {
             async function getCharacterDetails(id) {
                 const response = await axios.get(`https://swapi.co/api/people/${id}`)
-                console.log("This is the response: ", response.data.name)
-                name = response.data.name;
-                height = response.data.height;
-                mass = response.data.mass;
-                hairColor = response.data.hairColor;
-                skinColor = response.data.skinColor;
-                eyeColor = response.data.eyeColor;
-                birthYear = response.data.birthYear;
-                gender = response.data.gender;
-        
-                console.log("This is the name: ", name)
-                // pass back up films of character for MovieList component
+                // Creating an object to store details of character to be displayed
+                let details = {};
+                details.name = response.data.name;
+                details.height = response.data.height;
+                details.mass = response.data.mass;
+                details.hairColor = response.data.hairColor;
+                details.skinColor = response.data.skinColor;
+                details.eyeColor = response.data.eyeColor;
+                details.birthYear = response.data.birthYear;
+                details.gender = response.data.gender;
+                
+                // Passing back up details of chracter and the films
+                //  they have been in
+                props.getDetails(details)
                 props.getCharactersFilms(response.data.films)
             }
+            
             getCharacterDetails(charIDs[props.character]);
         }, [props.character]);
         
+        const classes = useStyles();
 
-        return(
-            <div>
-                <h6>Character's Name: {name}</h6>
-                <h6>Character's Height: {height}</h6>
-                <h6>Character's Mass: {mass}</h6>
-                <h6>Character's Hair Color: {hairColor}</h6>
-                <h6>Character's Skin Color: {skinColor}</h6>
-                <h6>Character's Eye Color: {eyeColor}</h6>
-                <h6>Character's Birth Year: {birthYear}</h6>
-                <h6>Character's Gender: {gender}</h6>
-            </div>
-        )
+        // Ternary operators to catch if any characteristic is undefined; if so, just returns an empty string
+        if (props.details) {
+            return (
+              <div className={classes.root}>
+                <Grid container spacing={3}>
+                  <Grid item xs={3}>
+                    <Paper className={classes.paper}>Name: {props.details.name ? props.details.name : ''}</Paper>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Paper className={classes.paper}>Height: {props.details.height ? props.details.height : '' }</Paper>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Paper className={classes.paper}>Mass: {props.details.mass ? props.details.mass : ''}</Paper>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Paper className={classes.paper}>Hair: {props.details.hairColor ? props.details.hairColor : ''}</Paper>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Paper className={classes.paper}>Skin: {props.details.skinColor ? props.details.skinColor : ''}</Paper>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Paper className={classes.paper}>Eye-Color: {props.details.eyeColor}</Paper>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Paper className={classes.paper}>Birthday: {props.details.birthYear}</Paper>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <Paper className={classes.paper}>Gender: {props.details.gender ? props.details.gender : ''}</Paper>
+                  </Grid>
+                </Grid>
+              </div>
+            );
+        }
+
     }
 
 }

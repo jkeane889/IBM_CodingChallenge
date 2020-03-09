@@ -1,5 +1,7 @@
 const axios = require('axios');
 
+// Test to start utilizing server-side API calls for server-side rendering
+
 const getCharacters = async () => {
     try {
         const response = await axios.get('https://swapi.co/api/people');

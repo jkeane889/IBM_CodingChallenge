@@ -1,23 +1,14 @@
 import axios from 'axios';
 import React, { useState, memo, useEffect } from 'react';
-// import { connect } from 'react-redux';
-// import { getAllCharacters } from '../redux/actions';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import AndroidIcon from '@material-ui/icons/Android';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-// import TextField from "@material-ui/core/TextField";
-// import Autocomplete from "@material-ui/lab/Autocomplete";
-// import Link from '@material-ui/core/Link';
 import DropDown from './components/DropDown';
 import CharacterInfo from './components/CharacterInfo';
 import MovieListItem from './components/MovieListItem';
@@ -66,21 +57,24 @@ const App = props => {
    // React hook to show selected character's films
    const [showing, setShowing] = useState(null);
 
+   // React book to store character's details
+   const [details, setDetails] = useState(null);
+
+   // get details of character
+   const getDetails = (val) => {
+     setDetails(val);
+   };
+
+   // select character
    const selectCharacter = (val) => {
-      console.log("This is the updated charVal: ", val)
       setCharacter(val);
    };
 
+   // get films of character
    const getCharactersFilms = (val) => {
-    console.log("These are the character's films: ", val)
     setFilms(val);
     setShowing(true);
    };
-
-   let cards = [1, 2, 3, 4, 5, 6, 7]
-
-   // if there are API results, iterate over and get all character names and push into new Hook array, pass this down
-   //    to drop down menu as options
 
    return (
       <React.Fragment>
@@ -101,7 +95,7 @@ const App = props => {
               Star Wars Cast
             </Typography>
               <DropDown align="center" selectCharacter={selectCharacter}></DropDown>
-            <CharacterInfo character={character} getCharactersFilms={getCharactersFilms}></CharacterInfo>
+            <CharacterInfo character={character} details={details} getDetails={getDetails} getCharactersFilms={getCharactersFilms}></CharacterInfo>
           </Container>
         </div>
         <Container className={classes.cardGrid} maxWidth="md">
@@ -127,18 +121,4 @@ const App = props => {
    )
 }
 
-// // Accessing Redux store for all characters
-// const mapStateToProps = state => {
-//   return {
-//       characters: characters
-//   }
-// }
-
-// // Using getAllCharacters Redux action
-// const mapDispatchToProps = {
-//   getAllCharacters: getAllCharacters
-// }
-
-// Connecting to Redux and memoizing App component
-// export default connect(mapStateToProps, mapDispatchToProps)(memo(App));
 export default memo(App);
