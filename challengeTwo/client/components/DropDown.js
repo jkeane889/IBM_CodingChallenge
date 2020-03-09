@@ -15,6 +15,9 @@ const useStyles = makeStyles({
 const DropDown = props => {
   const classes = useStyles();
 
+  // Wanted to originally use a Material UI component for the drop down/selection
+  //  components, but couldn't get "under the hood" when accessing the value in time
+
   // Value to store selection from user input
   const [value, setValue] = React.useState('');
 

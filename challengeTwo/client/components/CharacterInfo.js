@@ -3,7 +3,7 @@ import React, { useState, memo, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import characterIDs from './characterIDs'
+import Typography from '@material-ui/core/Typography';
 
 const CharacterInfo = props => {
 
@@ -27,28 +27,60 @@ const CharacterInfo = props => {
       <div className={classes.root}>
         <Grid container spacing={3}>
           <Grid item xs={3}>
-            <Paper className={classes.paper}>Name: {props.details.name ? props.details.name : ''}</Paper>
+            <Paper className={classes.paper}>
+              <Typography display='block'>
+                Name: {props.details.name ? props.details.name : ''}
+              </Typography>
+            </Paper>
           </Grid>
           <Grid item xs={3}>
-            <Paper className={classes.paper}>Height: {props.details.height ? props.details.height : '' }</Paper>
+            <Paper className={classes.paper}>
+              <Typography display='block'>
+              Height: {props.details.height ? props.details.height : '' }
+              </Typography>
+            </Paper>
           </Grid>
           <Grid item xs={3}>
-            <Paper className={classes.paper}>Mass: {props.details.mass ? props.details.mass : ''}</Paper>
+            <Paper className={classes.paper}>
+              <Typography display='block'>
+                Mass: {props.details.mass ? props.details.mass : ''}
+              </Typography>
+            </Paper>
           </Grid>
           <Grid item xs={3}>
-            <Paper className={classes.paper}>Hair: {props.details.hairColor ? props.details.hairColor : ''}</Paper>
+            <Paper className={classes.paper}>
+              <Typography display='block'>
+                Hair: {props.details.hairColor ? props.details.hairColor : ''}
+              </Typography>
+            </Paper>
           </Grid>
           <Grid item xs={3}>
-            <Paper className={classes.paper}>Skin: {props.details.skinColor ? props.details.skinColor : ''}</Paper>
+            <Paper className={classes.paper}>
+              <Typography display='block'>
+                Skin: {props.details.skinColor ? props.details.skinColor : ''}
+              </Typography>
+            </Paper>
           </Grid>
           <Grid item xs={3}>
-            <Paper className={classes.paper}>Eye-Color: {props.details.eyeColor}</Paper>
+            <Paper className={classes.paper}>
+              <Typography display='block'>
+                Eye-Color: {props.details.eyeColor ? props.details.eyeColor : ''}
+              </Typography>
+            </Paper>
           </Grid>
           <Grid item xs={3}>
-            <Paper className={classes.paper}>Birthday: {props.details.birthYear}</Paper>
+            <Paper className={classes.paper}>
+              <Typography display='block'>
+                Birthday: {props.details.birthYear ? props.details.birthYear : ''}
+              </Typography>
+            </Paper>
           </Grid>
           <Grid item xs={3}>
-            <Paper className={classes.paper}>Gender: {props.details.gender ? props.details.gender : ''}</Paper>
+            <Paper className={classes.paper}>
+                <Typography display='block'>
+                  Gender: {props.details.gender ? props.details.gender : ''}
+                </Typography>
+            </Paper>
           </Grid>
         </Grid>
       </div>
