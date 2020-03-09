@@ -11,7 +11,7 @@ module.exports = {
   module : {
     rules : [
       {
-        test : /\.js?/,
+        test : /\.(js|jsx)$/,
         include : SRC_DIR,
         loader : 'babel-loader',
       }
