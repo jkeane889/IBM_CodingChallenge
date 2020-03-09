@@ -52,38 +52,124 @@ const App = props => {
    // React hook to store selected character 
    const [character, setCharacter] = useState(null);
 
+   // React hook to get selected IDs of character's films
+   const [filmIDs, setFilmIDs] = useState(null);
+
    // React hook to get selected character's films
    const [films, setFilms] = useState(null);
-   
-   // React hook to show selected character's films
-   const [showing, setShowing] = useState(null);
 
-   // React book to store character's details
+   // React hook to show selected character's films
+   const [showing, setShowing] = useState(false);
+
+   // React hook to store character's details
    const [details, setDetails] = useState(null);
 
-   // get details of character
-   const getDetails = (val) => {
-     setDetails(val);
-   };
+   // React Hook boolean to determine if character names have loaded
+   const [loading, setLoading] = React.useState(true);
 
-   // select character
-   const selectCharacter = (val) => {
-     let lowerCase = val.toString().toLowerCase();
-     console.log("This is to lowercase", lowerCase)
-     console.log("the obj:", characterIDs)
-     if (!characterIDs.charIDs[lowerCase]) {
-       window.alert('Your input did not contain a Star Wars character, please try again!');
-       setCharacter('');
-      } else {
+   // React Hook to store all Star Wars characters with default drop down header
+   const [items, setItems] = React.useState([
+     { label: "Loading ...", value: "" }
+   ]);
+  
+  // Get all people from API, parse JSON data, then iterate over
+  //  final data and create object for each label and name
+  useEffect(() => {
+    async function getCharacters() {
+      const response = await fetch("https://swapi.co/api/people");
+      const body = await response.json();
+      setItems(body.results.map(({ name }) => ({ label: name, value: name })));
+      setLoading(false);
+    }
+    getCharacters();
+  }, []);
+
+  // Use effect React hook to fetch the details of individual from API based on change
+  //  in selected character
+  useEffect(() => {
+    async function getCharacterDetails(id) {
+        const response = await axios.get(`https://swapi.co/api/people/${id}`)
+        // Creating an object to store details of character to be displayed
+        console.log("This is the response: ", response.data)
+        let details = {};
+        details.name = response.data.name;
+        details.height = response.data.height;
+        details.mass = response.data.mass;
+        details.hairColor = response.data.hairColor;
+        details.skinColor = response.data.skinColor;
+        details.eyeColor = response.data.eyeColor;
+        details.birthYear = response.data.birthYear;
+        details.gender = response.data.gender;
+        details.homeworld = response.data.homeworld;
+        setDetails(details);
+
+        let filmIDs = [];
+
+        for (let i = 0; i < response.data.films.length; i++) {
+          let newID = getFilmID(response.data.films[i]);
+          filmIDs.push(newID);
+        };
+
+        setFilmIDs(filmIDs);
+    }
+
+    if (character) {
+      getCharacterDetails(characterIDs.charIDs[character.toLowerCase()]);
+    };
+    
+  }, [character]);
+
+  // Use effect hook to fetch the details of individual's films from API
+  useEffect(() => {
+      async function getFilmDetails(id) {
+          return await axios.get(`https://swapi.co/api/films/${id}`)
+      }
+
+      console.log("These are the filmIDs: ", filmIDs)
+
+      let films = [];
+
+      if (filmIDs) {
+        const forLoop = async _ => {
+          console.log('Start')
+        
+          for (let i = 0; i < filmIDs.length; i++) {
+            let filmObj = {};
+            const film = await getFilmDetails(filmIDs[i])
+            console.log("This the film: ", film)
+            filmObj.title = film.data.title;
+            filmObj.description = film.data.opening_crawl; 
+            films.push(filmObj);
+            if (films.length === filmIDs.length - 1) {
+              setShowing(true);
+              console.log("This is the value of showing", showing)
+            }
+          }
+        }
+
+        forLoop();
+        setFilms(films);
+      }
+  }, [filmIDs]);
+
+    // Helper function to pass down to DropDown menu component to update user's character search
+    const selectCharacter = (val) => {
+      let lowerCase = val.toString().toLowerCase();
+      if (!characterIDs.charIDs[lowerCase]) {
+        window.alert('Your input did not contain a Star Wars character, please try again!');
+        } else {
         setCharacter(val);
-     }  
-   };
+      }  
+    };
 
-   // get films of character
-   const getCharactersFilms = (val) => {
-    setFilms(val);
-    setShowing(true);
-   };
+    // Helper function to get each film's ID
+    const getFilmID = (filmURL) => {
+      let film = filmURL.split('/');
+      // remove unnecessary last element
+      film.pop();
+      let filmID = film.pop();
+      return filmID;
+    };
 
    return (
       <React.Fragment>
@@ -103,12 +189,12 @@ const App = props => {
             <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
               The Star Wars Characters
             </Typography>
-              <DropDown align="center" selectCharacter={selectCharacter}></DropDown>
-            <CharacterInfo character={character} details={details} getDetails={getDetails} getCharactersFilms={getCharactersFilms}></CharacterInfo>
+              <DropDown align="center" loading={loading} items={items} selectCharacter={selectCharacter}></DropDown>
+            <CharacterInfo details={details}></CharacterInfo>
           </Container>
         </div>
         <Container className={classes.cardGrid} maxWidth="md">
-          {showing && <Grid container spacing={2}>
+          {showing === true && <Grid container spacing={2}>
               {films.map((film, index) => (
                 <MovieListItem key={index} film={film}></MovieListItem>
               ))}
@@ -116,7 +202,6 @@ const App = props => {
           }
         </Container>
       </main>
-      {/* Footer */}
       <footer className={classes.footer}>
         <Typography variant="h6" align="center" gutterBottom>
           Search For your Favorite Star Wars Characters!
@@ -125,7 +210,6 @@ const App = props => {
           Select a character from the drop down menu to see their details OR add a new character to fetch their details... 
         </Typography>
       </footer>
-      {/* End footer */}
     </React.Fragment>
    )
 }

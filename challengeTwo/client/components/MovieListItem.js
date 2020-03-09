@@ -26,43 +26,28 @@ const useStyles = makeStyles(theme => ({
    }
 }));
 
+// Passing down into MovieList item each film's title and description 
 const MovieListItem = props => {
   const classes = useStyles();
-  const [filmTitle, setTitle] = useState(null);
-  const [filmDesc, setDesc] = useState(null);
+
+  console.log("This is the props.film: ", props.film)
 
   if (props.film) {
-    let url = props.film.toString().split('/');
-    // Popping off unused element from input string
-    url.pop();
-    // getting ID for film to now display appropriate details
-    let filmID = url.pop();
-
-    useEffect(() => {
-      // get character details and id
-        async function getCharacterDetails(id) {
-            const response = await axios.get(`https://swapi.co/api/films/${id}`)
-            setTitle(response.data.title);
-            setDesc(response.response.data.opening_crawl);
-        }
-        getCharacterDetails(filmID);
-    }, [props.character]);
-    
     return (
       <Grid item xs={12} sm={6} md={4}>
-          <Card className={classes.card}>
-            <CardContent className={classes.cardContent}>
-              <Typography gutterBottom variant="h5" component="h2">
-                {filmTitle}
-              </Typography>
-              <Typography>
-                {filmDesc}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+        <Card className={classes.card}>
+          <CardContent className={classes.cardContent}>
+            <Typography gutterBottom variant="h5" component="h2">
+              {props.film.title}
+            </Typography>
+            <Typography>
+              {props.film.description}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
     );
   }
-}
+};
 
 export default memo(MovieListItem);
