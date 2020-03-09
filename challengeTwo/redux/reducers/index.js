@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import navigateReducer from './navigateReducer';
+import charactersReducer from './charactersReducer';
 
 const rootReducer = combineReducers({
-    nav: navigateReducer,
+    characters: charactersReducer,
 });
 
 export default rootReducer;
