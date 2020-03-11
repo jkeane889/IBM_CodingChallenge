@@ -1,20 +1,38 @@
-import axios from 'axios';
-import React, { memo } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
-import PersonIcon from '@material-ui/icons/Person';
-import HeightIcon from '@material-ui/icons/Height';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import AccessibilityIcon from '@material-ui/icons/Accessibility';
 import FitnessCenterIcon from '@material-ui/icons/FitnessCenter';
 import InvertColorsIcon from '@material-ui/icons/InvertColors';
-import AccessibilityIcon from '@material-ui/icons/Accessibility';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import VisibilityIcon from '@material-ui/icons/Visibility';
-import CakeIcon from '@material-ui/icons/Cake';
-import WcIcon from '@material-ui/icons/Wc';
+import ListItemText from '@material-ui/core/ListItemText';
 import LanguageIcon from '@material-ui/icons/Language';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import yellow from '@material-ui/core/colors/yellow';
+import PersonIcon from '@material-ui/icons/Person';
+import HeightIcon from '@material-ui/icons/Height';
+import ListItem from '@material-ui/core/ListItem';
+import grey from '@material-ui/core/colors/grey';
+import CakeIcon from '@material-ui/icons/Cake';
+import Avatar from '@material-ui/core/Avatar';
+import WcIcon from '@material-ui/icons/Wc';
+import List from '@material-ui/core/List';
+import React, { memo } from 'react';
+
+const theme = createMuiTheme({
+    palette: {
+      primary: {
+        light: '#f5f5f5',
+        main: grey[900],
+        dark: '#424242'
+      },
+      secondary: {
+        light: '#ffff8d',
+        main: '#ffea00',
+        dark: '#ffd600'
+    }
+  }
+});
 
 const CharacterInfo = props => {
 
@@ -23,14 +41,15 @@ const CharacterInfo = props => {
       width: '100%',
       maxWidth: '100%',
       marginTop: '2%',
-      backgroundColor: theme.palette.background.paper,
+      backgroundColor: theme.palette.primary.dark,
     },
+    text: {}
   }));
   
   if (props.details) {
     const classes = useStyles();
 
-    console.log("These are the details: ", props.details)
+    // console.log("These are the details: ", props.details)
     let name = props.details.name;
     let height = props.details.height;
     let mass = props.details.mass;
@@ -49,7 +68,10 @@ const CharacterInfo = props => {
               <PersonIcon />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText primary="Name" secondary={name} />
+          <ListItemText/>
+            <Typography gutterBottom variant="h5" component="h6" color="secondary">
+              Name: {name}
+            </Typography>
         </ListItem>
         <ListItem>
           <ListItemAvatar>
@@ -57,7 +79,10 @@ const CharacterInfo = props => {
               <HeightIcon />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText primary="Height" secondary={height} />
+          <ListItemText/>
+          <Typography gutterBottom variant="h5" component="h6" color="secondary">
+              Height: {height}
+            </Typography>
         </ListItem>
         <ListItem>
           <ListItemAvatar>
@@ -65,7 +90,10 @@ const CharacterInfo = props => {
               <FitnessCenterIcon />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText primary="Mass" secondary={mass} />
+          <ListItemText/>
+          <Typography gutterBottom variant="h5" component="h6" color="secondary">
+              Mass: {mass}
+            </Typography>
         </ListItem>
         <ListItem>
           <ListItemAvatar>
@@ -73,7 +101,10 @@ const CharacterInfo = props => {
               <InvertColorsIcon />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText primary="Hair Color" secondary={hair_color} />
+          <ListItemText/>
+          <Typography gutterBottom variant="h5" component="h6" color="secondary">
+              Hair Color: {hair_color}
+            </Typography>
         </ListItem>
         <ListItem>
           <ListItemAvatar>
@@ -81,7 +112,10 @@ const CharacterInfo = props => {
               <AccessibilityIcon />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText primary="Skin Color" secondary={skin_color} />
+          <ListItemText/>
+          <Typography gutterBottom variant="h5" component="h6" color="secondary">
+              Skin Color: {skin_color}
+            </Typography>
         </ListItem>
         <ListItem>
           <ListItemAvatar>
@@ -89,7 +123,10 @@ const CharacterInfo = props => {
               <VisibilityIcon />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText primary="Eye Color" secondary={eye_color} />
+          <ListItemText />
+          <Typography gutterBottom variant="h5" component="h6" color="secondary">
+              Eye Color: {eye_color}
+            </Typography>
         </ListItem>
         <ListItem>
           <ListItemAvatar>
@@ -97,7 +134,10 @@ const CharacterInfo = props => {
               <CakeIcon />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText primary="Birthday" secondary={birth_year} />
+          <ListItemText/>
+          <Typography gutterBottom variant="h5" component="h6" color="secondary">
+              Birthday: {birth_year}
+            </Typography>
         </ListItem>
         <ListItem>
           <ListItemAvatar>
@@ -105,7 +145,10 @@ const CharacterInfo = props => {
               <WcIcon />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText primary="Gender" secondary={gender} />
+          <ListItemText/>
+          <Typography gutterBottom variant="h5" component="h6" color="secondary">
+              Gender: {gender}
+            </Typography>
         </ListItem>
         <ListItem>
           <ListItemAvatar>
@@ -113,7 +156,10 @@ const CharacterInfo = props => {
               <LanguageIcon />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText primary="Home World" secondary={homeworld} />
+          <ListItemText/>
+          <Typography gutterBottom variant="h5" component="h6" color="secondary">
+              Homeworld: {homeworld}
+            </Typography>
         </ListItem>
       </List>
     );

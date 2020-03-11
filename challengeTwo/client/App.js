@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
      marginRight: theme.spacing(2),
    },
    heroContent: {
-     backgroundColor: theme.palette.primary.main,
+     backgroundColor: grey[900],
      padding: theme.spacing(8, 0, 6),
    },
    heroButtons: {
@@ -57,7 +57,7 @@ const useStyles = makeStyles(theme => ({
      flexGrow: 1,
    },
    footer: {
-     backgroundColor: theme.palette.primary.light,
+     backgroundColor: grey[900],
      padding: theme.spacing(6),
    },
 }));
@@ -108,9 +108,9 @@ const App = props => {
     async function getCharacterDetails(id) {
         const response = await axios.get(`https://swapi.co/api/people/${id}`)
         // Creating an object to store details of character to be displayed
-        console.log("This is the response: ", response.data)
+        // console.log("This is the response: ", response.data)
         const homeworld = await axios.get(response.data.homeworld)
-        console.log("This is the homeworld: ", homeworld)
+        // console.log("This is the homeworld: ", homeworld)
 
         let details = {};
         details.name = response.data.name;
@@ -156,7 +156,7 @@ const App = props => {
         // Axios all to get each film request for the character
         axios.all(requests)
         .then(responseArr => {
-          console.log(responseArr)
+          // console.log(responseArr)
           responseArr.forEach(response => {
             let movie = {};
             movie.title = response.data.title;
@@ -175,7 +175,7 @@ const App = props => {
   
   // Helper function to pass down to DropDown menu component to update user's character search
   const selectCharacter = (val) => {
-    console.log("This is the value selected: ", val)
+    // console.log("This is the value selected: ", val)
     let lowerCase = val.toString().toLowerCase();
     if (!characterIDs.charIDs[lowerCase]) {
       window.alert('Your input did not contain a Star Wars character, please try again!');
@@ -230,7 +230,7 @@ const App = props => {
             Search For your Favorite Star Wars Characters!
           </Typography>
           <Typography variant="subtitle1" align="center" color="secondary" component="p">
-            Select a character from the drop down menu to see their details OR add a new character to fetch their details... 
+            Select a character from the drop down menu to see their details OR type in a character to fetch their details... 
           </Typography>
         </footer>
       </React.Fragment>

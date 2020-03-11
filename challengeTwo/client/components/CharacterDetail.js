@@ -5,7 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
 const CharacterDetail = props => {
-    console.log("These are the props.details: ", props.details)
+    // console.log("These are the props.details: ", props.details)
     return (
         <React.Fragment>
         <Grid item xs={4}>
