@@ -1,4 +1,7 @@
 import axios from 'axios';
+import { makeStyles } from '@material-ui/core/styles';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import grey from '@material-ui/core/colors/grey';
 import React, { useState, memo, useEffect } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
@@ -7,19 +10,33 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import DropDown from './components/DropDown';
 import CharacterInfo from './components/CharacterInfo';
 import MovieListItem from './components/MovieListItem';
 import characterIDs from './components/characterIDs'
 
+const theme = createMuiTheme({
+    palette: {
+      primary: {
+        light: '#f5f5f5',
+        main: grey[900],
+        dark: '#424242'
+      },
+      secondary: {
+        light: '#ffff8d',
+        main: '#ffea00',
+        dark: '#ffd600'
+    }
+  }
+});
+
 const useStyles = makeStyles(theme => ({
    icon: {
      marginRight: theme.spacing(2),
    },
    heroContent: {
-     backgroundColor: theme.palette.background.paper,
+     backgroundColor: theme.palette.primary.main,
      padding: theme.spacing(8, 0, 6),
    },
    heroButtons: {
@@ -40,7 +57,7 @@ const useStyles = makeStyles(theme => ({
      flexGrow: 1,
    },
    footer: {
-     backgroundColor: theme.palette.background.paper,
+     backgroundColor: theme.palette.primary.light,
      padding: theme.spacing(6),
    },
 }));
@@ -121,8 +138,8 @@ const App = props => {
 
   // Use effect hook to fetch the details of individual's films from API
   useEffect(() => {
-      async function getFilmDetails(id) {
-          return await axios.get(`https://swapi.co/api/films/${id}`)
+      async function getFilmDetails(request) {
+          return await axios.get(request);
       }
 
       console.log("These are the filmIDs: ", filmIDs)
@@ -130,25 +147,26 @@ const App = props => {
       let films = [];
 
       if (filmIDs) {
-        const forLoop = async _ => {
-          console.log('Start')
-        
-          for (let i = 0; i < filmIDs.length; i++) {
-            let filmObj = {};
-            const film = await getFilmDetails(filmIDs[i])
-            console.log("This the film: ", film)
-            filmObj.title = film.data.title;
-            filmObj.description = film.data.opening_crawl; 
-            films.push(filmObj);
-            if (films.length === filmIDs.length - 1) {
-              setShowing(true);
-              console.log("This is the value of showing", showing)
-            }
-          }
-        }
+        let requests = filmIDs.map((id => {
+          return (getFilmDetails('https://swapi.co/api/films/' + id.toString()))
+        }))
 
-        forLoop();
-        setFilms(films);
+        axios.all(requests)
+        .then(responseArr => {
+          console.log(responseArr)
+          responseArr.forEach(response => {
+            let movie = {};
+            movie.title = response.data.title;
+            movie.description = response.data.opening_crawl;
+            films.push(movie)
+          })
+          setFilms(films);
+          setShowing(true);
+        })
+        .catch((err) => {
+          console.log('FAIL', err)
+        });
+
       }
   }, [filmIDs]);
 
@@ -172,45 +190,47 @@ const App = props => {
     };
 
    return (
-      <React.Fragment>
-      <CssBaseline />
-      <AppBar position="relative">
-        <Toolbar>
-          <AndroidIcon className={classes.icon} />
-          <Typography variant="h6" color="inherit" noWrap>
-            IBM Star Wars Coding Challenge Two
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <main>
-        {/* Hero unit */}
-        <div className={classes.heroContent}>
-          <Container maxWidth="sm">
-            <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-              The Star Wars Characters
+    <ThemeProvider theme={theme}>
+        <React.Fragment>
+        <CssBaseline />
+        <AppBar position="relative">
+          <Toolbar>
+            <AndroidIcon className={classes.icon} />
+            <Typography variant="h6" color="inherit" noWrap>
+              IBM Star Wars Coding Challenge Two
             </Typography>
-              <DropDown align="center" loading={loading} items={items} selectCharacter={selectCharacter}></DropDown>
-            <CharacterInfo details={details}></CharacterInfo>
+          </Toolbar>
+        </AppBar> 
+        <main>
+          {/* Hero unit */}
+          <div className={classes.heroContent}>
+            <Container maxWidth="sm">
+              <Typography component="h1" variant="h2" align="center" color="secondary" gutterBottom>
+                The Star Wars Characters
+              </Typography>
+                <DropDown align="center" loading={loading} items={items} selectCharacter={selectCharacter}></DropDown>
+              <CharacterInfo details={details}></CharacterInfo>
+            </Container>
+          </div>
+          <Container className={classes.cardGrid} maxWidth="md">
+            {showing === true && <Grid container spacing={2}>
+                {films.map((film, index) => (
+                  <MovieListItem key={index} film={film}></MovieListItem>
+                ))}
+              </Grid>
+            }
           </Container>
-        </div>
-        <Container className={classes.cardGrid} maxWidth="md">
-          {showing === true && <Grid container spacing={2}>
-              {films.map((film, index) => (
-                <MovieListItem key={index} film={film}></MovieListItem>
-              ))}
-            </Grid>
-          }
-        </Container>
-      </main>
-      <footer className={classes.footer}>
-        <Typography variant="h6" align="center" gutterBottom>
-          Search For your Favorite Star Wars Characters!
-        </Typography>
-        <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
-          Select a character from the drop down menu to see their details OR add a new character to fetch their details... 
-        </Typography>
-      </footer>
-    </React.Fragment>
+        </main>
+        <footer className={classes.footer}>
+          <Typography variant="h6" align="center" color="secondary" gutterBottom>
+            Search For your Favorite Star Wars Characters!
+          </Typography>
+          <Typography variant="subtitle1" align="center" color="secondary" component="p">
+            Select a character from the drop down menu to see their details OR add a new character to fetch their details... 
+          </Typography>
+        </footer>
+      </React.Fragment>
+    </ThemeProvider>
    )
 }
 
