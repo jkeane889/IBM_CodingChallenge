@@ -108,8 +108,5 @@ const isDivisible = (n, p, q) => {
         };
     };
 
-  return sequence
+    return sequence.join(' ')
 };
-
-console.log(isDivisible(50, 2, 3));
-console.log(isDivisible(100, 3, 5));
