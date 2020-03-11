@@ -63,6 +63,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const App = props => {
+   
    // using MaterialUI styles
    const classes = useStyles();
 
@@ -145,8 +146,6 @@ const App = props => {
           return await axios.get(request);
       }
 
-      console.log("These are the filmIDs: ", filmIDs)
-
       let films = [];
 
       if (filmIDs) {
@@ -173,25 +172,26 @@ const App = props => {
 
       }
   }, [filmIDs]);
+  
+  // Helper function to pass down to DropDown menu component to update user's character search
+  const selectCharacter = (val) => {
+    console.log("This is the value selected: ", val)
+    let lowerCase = val.toString().toLowerCase();
+    if (!characterIDs.charIDs[lowerCase]) {
+      window.alert('Your input did not contain a Star Wars character, please try again!');
+    } else {
+      setCharacter(val);
+    }  
+  };
 
-    // Helper function to pass down to DropDown menu component to update user's character search
-    const selectCharacter = (val) => {
-      let lowerCase = val.toString().toLowerCase();
-      if (!characterIDs.charIDs[lowerCase]) {
-        window.alert('Your input did not contain a Star Wars character, please try again!');
-        } else {
-        setCharacter(val);
-      }  
-    };
-
-    // Helper function to get each film's ID
-    const getFilmID = (filmURL) => {
-      let film = filmURL.split('/');
-      // remove unnecessary last element
-      film.pop();
-      let filmID = film.pop();
-      return filmID;
-    };
+  // Helper function to get each film's ID
+  const getFilmID = (filmURL) => {
+    let film = filmURL.split('/');
+    // remove unnecessary last element
+    film.pop();
+    let filmID = film.pop();
+    return filmID;
+  };
 
    return (
     <ThemeProvider theme={theme}>

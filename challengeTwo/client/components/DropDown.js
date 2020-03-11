@@ -27,8 +27,9 @@ const DropDown = props => {
 				value={value}
 			  onChange={(e) => setValue(e.target.value)}
 			/>
-      <button onSubmit={() => {
-        props.selectCharacter(value)
+      <button onClick={() => {
+        props.selectCharacter(value);
+        setValue('')
       }}>Search</button>
       <br></br>
       <select disabled={props.loading}

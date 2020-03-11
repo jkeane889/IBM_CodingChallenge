@@ -32,8 +32,6 @@ const useStyles = makeStyles(theme => ({
 const MovieListItem = props => {
   const classes = useStyles();
 
-  console.log("This is the props.film: ", props.film)
-
   if (props.film) {
     return (
       <Grid item xs={12} sm={6} md={4}>
