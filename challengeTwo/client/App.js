@@ -108,16 +108,19 @@ const App = props => {
         const response = await axios.get(`https://swapi.co/api/people/${id}`)
         // Creating an object to store details of character to be displayed
         console.log("This is the response: ", response.data)
+        const homeworld = await axios.get(response.data.homeworld)
+        console.log("This is the homeworld: ", homeworld)
+
         let details = {};
         details.name = response.data.name;
         details.height = response.data.height;
         details.mass = response.data.mass;
-        details.hairColor = response.data.hairColor;
-        details.skinColor = response.data.skinColor;
-        details.eyeColor = response.data.eyeColor;
-        details.birthYear = response.data.birthYear;
+        details.hair_color = response.data.hair_color;
+        details.skin_color = response.data.skin_color;
+        details.eye_color = response.data.eye_color;
+        details.birth_year = response.data.birth_year;
         details.gender = response.data.gender;
-        details.homeworld = response.data.homeworld;
+        details.homeworld = homeworld.data.name;
         setDetails(details);
 
         let filmIDs = [];
@@ -151,6 +154,7 @@ const App = props => {
           return (getFilmDetails('https://swapi.co/api/films/' + id.toString()))
         }))
 
+        // Axios all to get each film request for the character
         axios.all(requests)
         .then(responseArr => {
           console.log(responseArr)

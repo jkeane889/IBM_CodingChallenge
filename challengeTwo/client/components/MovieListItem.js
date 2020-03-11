@@ -17,9 +17,11 @@ const useStyles = makeStyles(theme => ({
      height: '100%',
      display: 'flex',
      flexDirection: 'column',
+     color: theme.palette.primary.main
    },
    cardMedia: {
      paddingTop: '56.25%', // 16:9
+     color: theme.palette.primary.main
    },
    cardContent: {
      flexGrow: 1,
@@ -37,10 +39,10 @@ const MovieListItem = props => {
       <Grid item xs={12} sm={6} md={4}>
         <Card className={classes.card}>
           <CardContent className={classes.cardContent}>
-            <Typography gutterBottom variant="h5" component="h2">
+            <Typography gutterBottom variant="h5" component="h2" color="secondary">
               {props.film.title}
             </Typography>
-            <Typography>
+            <Typography color="secondary">
               {props.film.description}
             </Typography>
           </CardContent>
